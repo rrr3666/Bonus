@@ -43,12 +43,6 @@
         scrollbar-width: none;
         scrollbar-height: none;
       }
-      /* Скрываем скролл */
-      ::-webkit-scrollbar {
-        display: none;
-        width: 0;
-        height: 0;
-      }
       /* Канвас и загрузочный экран */
       #canvas {
         position: fixed;
@@ -94,17 +88,6 @@
  	background-size: contain;
         background-attachment: scroll;
       }
-      .console_helper {
-        position: absolute;
-        background-color: white;
-        transform: translate(-50%, -50%);
-        left: 50%;
-        -webkit-box-shadow: 0px 0px 10px 5px rgba(34, 60, 80, 0.24);
-        -moz-box-shadow: 0px 0px 10px 5px rgba(34, 60, 80, 0.24);
-        box-shadow: 0px 0px 10px 5px rgba(34, 60, 80, 0.24);
-        overflow: hidden;
-        display: none;
-      }
       p {
         font-family: Arial, Helvetica, sans-serif;
         word-wrap: break-word;
@@ -117,10 +100,28 @@
     <canvas id="canvas" class="canvas" tabindex="-1"></canvas>
     <div class="loading_bg">
       <div class="loading">
-        <div class="console_helper">
-          <p id="console_helper_text" style="position: absolute; overflow-x: hidden; overflow-y: scroll; scroll-behavior: smooth; scrollbar-width: none; margin: auto; top: 0; left: 0; bottom: 0; right: 0; overflow-width: hidden; text-align: left;"></p>
+        <div id="flags" style="position: absolute; top: 20%; left: 5%; width: 100%; height: 100%;">
+          <div id="flag1" style="position: absolute; top: 0%; left: 1%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag1.jpg');"></div>
+
+          <div id="flag2" style="position: absolute; top: 0%; left: 16%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag2.jpg');"></div>
+
+          <div id="flag3" style="position: absolute; top: 0%; left: 37%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag3.jpg');"></div>
+
+          <div id="flag4" style="position: absolute; top: 0%; left: 53%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag4.jpg');"></div>
+
+          <div id="flag5" style="position: absolute; top: 0%; left: 69%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag5.jpg');"></div>
+
+          <div id="flag6" style="position: absolute; top: 0%; left: 85%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag6.jpg');"></div>
+
+          <div id="flag7" style="position: absolute; top: 0%; left: 85%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag7.jpg');"></div>
+
+          <div id="flag8" style="position: absolute; top: 0%; left: 85%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag8.jpg');"></div>
         </div>
-        <div class="loading_logo"></div>
+        <p id="bottom_text" style="position: absolute; top: 82%; left: 10%; bottom: 0; width: 100%; max-width: 80%; text-align: center; color: white; opacity: 70%;">Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов.<br><br>Все права защищены (c) 2024</p>
+        <div id="loading_gif" style="position: absolute; transform: translate(-50%, -50%); top: 45%; width: 20%; height: 20%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('loading.gif');"></div>
+        <p id="loading_text" style="position: absolute; top: 60%; bottom: 0; width: 100%; max-width: 100%; text-align: center; color: white;">0%</p>
+        <div class="loading_logo" id="company_logo"></div>
+        <div class="loading_logo" id="game_logo"></div>
         <div class="loading_bar">
           <div class="loading_bar_fill"></div>
         </div>
@@ -132,13 +133,16 @@
       var loading = document.querySelector(".loading");
       var loading_bar = document.querySelector(".loading_bar");
       var loading_bar_fill = document.querySelector(".loading_bar_fill");
-      var loading_logo = document.querySelector(".loading_logo");
-      var console_helper = document.querySelector(".console_helper");
-      var console_helper_text = document.getElementById("console_helper_text");
+      var company_logo = document.getElementById("company_logo");
+      var game_logo = document.getElementById("game_logo");
+      var flag_container = document.getElementById("flags");
+      var flags = [document.getElementById("flag1"), document.getElementById("flag2"), document.getElementById("flag3"), document.getElementById("flag4"), document.getElementById("flag5"), document.getElementById("flag6"), document.getElementById("flag7"), document.getElementById("flag8")];
+      var bottom_text = document.getElementById("bottom_text");
+      var loading_gif = document.getElementById("loading_gif");
+      var loading_text = document.getElementById("loading_text");
 
       // Для того, чтобы текст правильно масштабировался
       var scaleFactor;
-      var enableConsoleHelper = true;
 
       // Подключаем ATinstance для связи Unity с браузером
       var ATinstance = null;
@@ -152,16 +156,6 @@
           }
         };
         checkNull();
-      }
-
-      // Для консоли помощника
-      function unityShowBanner(msg, type) {
-        if(type == 'error' && enableConsoleHelper) {
-          if(msg.includes("Unable to parse")) {
-            console_helper.style.display = "block";
-            console_helper_text.innerHTML = '<strong>Внимание, ошибка!</strong><br>Пожалуйста, вернитесь в Unity и пройдите по пути File > Build Settings > Player Settings > Publishing Settings.<tagname style="margin-left: 2%; display: block;">• Если Compression Format стоит на Brotli или Gzip, включите галочку Decompression Fallback.<br>• Если Compression Format стоит на None, снимите галочку с Decompression Fallback.</tagname>';
-          }
-        }
       }
 
       // Выключаем появление меню при правом клике мыши
@@ -196,22 +190,24 @@
       });
 
 
+      company_logo.style.backgroundImage = "url('company_logo.png')";
+
       // Настраиваем лого во время загрузочного экрана
-      loading_logo.style.backgroundImage = "url('title.png')";
+      game_logo.style.backgroundImage = "url('title.png')";
 
       // Настраиваем фон полос по бокам
-      document.body.style.backgroundImage = "linear-gradient(#4649C1, #2C0484)";
+      document.body.style.backgroundImage = "linear-gradient(#22d753, #2c1182)";
 
       // Настраиваем фон загрузочного экрана
-      loading_bg.style.backgroundImage = "linear-gradient(#4649C1, #2C0484)";
+      loading_bg.style.backgroundImage = "linear-gradient(#22d753, #2c1182)";
 
       function setLoading(logoPositionTop, logoPositionLeft, logoWidth, logoHeight, positionTop, positionLeft, width, height, barColor, barFillColor, barBorder, barFillBorder, barBorderRadius, barFillBorderRadius, barBackgroundImage, barBackgroundSize) {
         // Указываем размер логотипа
-        loading_logo.style.top = logoPositionTop;
-        loading_logo.style.left = logoPositionLeft;
+        company_logo.style.top = logoPositionTop;
+        company_logo.style.left = logoPositionLeft;
 
-        loading_logo.style.width = logoWidth; 
-        loading_logo.style.height = logoHeight;
+        company_logo.style.width = logoWidth; 
+        company_logo.style.height = logoHeight;
 
         loading_bar.style.top = positionTop;
         loading_bar.style.left = positionLeft;
@@ -237,11 +233,16 @@
         if(window.innerWidth / window.innerHeight > aspectRatio) {
           object.style.width = window.innerHeight * aspectRatio + "px";
           object.style.height = "100%";
-          scaleFactor = window.innerHeight * aspectRatio / 21;
+          scaleFactor = window.innerHeight * aspectRatio / 20;
         } else {
           object.style.width = "100%";
           object.style.height = window.innerWidth / aspectRatio + "px";
-          scaleFactor = window.innerWidth / aspectRatio / 34;
+          scaleFactor = window.innerWidth / aspectRatio / 36;
+        }
+
+        var text = document.getElementsByTagName("p");
+        for(let i = 0; i < text.length; i++) {
+          text[i].style.fontSize = scaleFactor * 0.5 + 'px';
         }
 
         // Центрируем
@@ -254,24 +255,15 @@
 
       // Настраиваем расположение, размер и оформление полосы с лого
       var loading_bar_style;
-      var loadingStyleText = '1';
+      var loadingStyleText = '';
 
       var loadingZeroStrings = ["0"];
       var loadingOneStrings = ["1"];
-      var loadingTwoStrings = ["2"];
-      var loadingThreeStrings = ["3"];
-      var loadingFourStrings = ["4"];
 
       if(loadingZeroStrings.some(i => loadingStyleText.includes(i))) {
         loading_bar_style = 0;
       } else if(loadingOneStrings.some(i => loadingStyleText.includes(i))) {
         loading_bar_style = 1;
-      } else if(loadingTwoStrings.some(i => loadingStyleText.includes(i))) {
-        loading_bar_style = 2;
-      } else if(loadingThreeStrings.some(i => loadingStyleText.includes(i))) {
-        loading_bar_style = 3;
-      } else if(loadingFourStrings.some(i => loadingStyleText.includes(i))) {
-        loading_bar_style = 4;
       } else {
         loading_bar_style = 0;
       }
@@ -280,60 +272,53 @@
       // Вызываем апдейт при входе на страницу и изменений размеров окна браузера
       function Update() {
 
-        console_helper_text.style.fontSize = scaleFactor * 0.7 + 'px';
-
-        if(window.innerWidth < window.innerHeight) {
-          // Настройка консоли помощника
-          console_helper.style.top = '15%';
-          console_helper.style.width = '80%';
-          console_helper.style.height = '20%';
-          console_helper.style.borderRadius = '3% 3% 3% 3% / 7%';
-          console_helper_text.style.padding = "3% 3% 3% 3%";
-
-          isPortrait = true;
-          lock(loading, 9/16);
-          if(loading_bar_style == 0) {
-            // По умолчанию
-            setLoading("44%", "50%", "30%", "30%", "55%", "50%", "70%", "2%", "#FFF", "#00dc15", "0px 0px 0px 7px rgba(34, 60, 80, 0.2)", "0", "8px 8px 8px 8px", "8px 8px 8px 8px", "linear-gradient(45deg, rgba(0, 0, 0, 0.25) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 0.25) 75%, transparent 75%, transparent)", "15px 15px");
-          } else if(loading_bar_style == 1) {
-            // Минимализм со свечением
-            setLoading("44%", "50%", "30%", "30%", "55%", "50%", "70%", "2%", "rgba(255, 255, 255, 0.1)", "#FFF", "0", "0 0 10px rgba(255, 255, 255, 0.5)", "0", "0", "0", "0");
-          } else if(loading_bar_style == 2) {
-            // Нет слов
-            setLoading("44%", "50%", "30%", "30%", "55%", "50%", "70%", "2%", "0", "white", "0px 0px 0px 4px rgba(34, 60, 80, 0.2)", "0", "8px 8px 8px 8px", "8px 8px 8px 8px", "0", "0");
-          } else if(loading_bar_style == 3) {
-            // Без округлений
-            setLoading("44%", "50%", "30%", "30%", "55%", "50%", "70%", "1%", "#1c2329", "#ffffff", "0", "0", "0", "0", "0", "0");
-          } else if(loading_bar_style == 4) {
-            // Округленный и не слишком длинный
-            setLoading("44%", "50%", "30%", "30%", "55%", "50%", "50%", "2.7%", "#1c2329", "#ffffff", "0", "0", "12px 12px 12px 12px", "12px 12px 12px 12px", "0", "0");
+        lock(loading, 9/16);
+        if(loading_bar_style == 0) {
+          setLoading("10%", "50%", "40%", "40%", "75%", "50%", "70%", "2%", "rgba(255, 255, 255, 0.1)", "#FFF", "0", "0 0 10px rgba(255, 255, 255, 0.5)", "0", "0", "0", "0");
+          flag_container.style.top = "20%";
+          for(let i = 0; i < flags.length; i++) {
+            flags[0].style.left = "4%";
+            flags[1].style.left = "15%";
+            flags[2].style.left = "26%";
+            flags[3].style.left = "37%";
+            flags[4].style.left = "48%";
+            flags[5].style.left = "59%";
+            flags[6].style.left = "70%";
+            flags[7].style.left = "81%";
           }
-        } else {
-          // Настройка консоли помощника
-          console_helper.style.top = '13%';
-          console_helper.style.width = '45%';
-          console_helper.style.height = '20%';
-          console_helper.style.borderRadius = '3% 3% 3% 3% / 13%';
-          console_helper_text.style.padding = "2% 2% 2% 2%";
+          loading_text.style.top = "76%";
+          loading_gif.style.display = "none";
 
-          isPortrait = false;
-          lock(loading, 16/9);
-          if(loading_bar_style == 0) {
-            // По умолчанию
-            setLoading("40%", "50%", "30%", "30%", "59%", "50%", "70%", "3%", "#FFF", "#00dc15", "0px 0px 0px 7px rgba(34, 60, 80, 0.2)", "0", "12px 12px 12px 12px", "12px 12px 12px 12px", "linear-gradient(45deg, rgba(0, 0, 0, 0.25) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 0.25) 75%, transparent 75%, transparent)", "15px 15px");
-          } else if(loading_bar_style == 1) {
-            // Минимализм со свечением
-            setLoading("40%", "50%", "30%", "30%", "59%", "50%", "70%", "3%", "rgba(255, 255, 255, 0.1)", "#FFF", "0", "0 0 10px rgba(255, 255, 255, 0.5)", "0", "0", "0", "0");
-          } else if(loading_bar_style == 2) {
-            // Нет слов
-            setLoading("40%", "50%", "30%", "30%", "59%", "50%", "70%", "3%", "0", "white", "0px 0px 0px 4px rgba(34, 60, 80, 0.2)", "0", "12px 12px 12px 12px", "12px 12px 12px 12px", "0", "0");
-          } else if(loading_bar_style == 3) {
-            // Без округлений
-            setLoading("40%", "50%", "30%", "30%", "59%", "50%", "70%", "2%", "#1c2329", "#ffffff", "0", "0", "0", "0", "0", "0");
-          } else if(loading_bar_style == 4) {
-            // Округленный и не слишком длинный
-            setLoading("40%", "50%", "30%", "30%", "59%", "50%", "30%", "4.4%", "#1c2329", "#ffffff", "0", "0", "16px 16px 16px 16px", "16px 16px 16px 16px", "0", "0");
+          game_logo.style.top = "50%";
+          game_logo.style.left = "50%";
+          game_logo.style.width = "50%"; 
+          game_logo.style.height = "50%";
+        } else if(loading_bar_style == 1) {
+          setLoading("10%", "50%", "40%", "40%", "75%", "50%", "70%", "2%", "rgba(255, 255, 255, 0.1)", "#FFF", "0", "0 0 10px rgba(255, 255, 255, 0.5)", "0", "0", "0", "0");
+          flag_container.style.top = "20%";
+          for(let i = 0; i < flags.length; i++) {
+            flags[0].style.left = "4%";
+            flags[1].style.left = "15%";
+            flags[2].style.left = "26%";
+            flags[3].style.left = "37%";
+            flags[4].style.left = "48%";
+            flags[5].style.left = "59%";
+            flags[6].style.left = "70%";
+            flags[7].style.left = "81%";
           }
+          loading_text.style.display = "none";
+          loading_bar.style.display = "none";
+          loading_bar_fill.style.display = "none";
+          loading_gif.style.display = "block";
+          loading_gif.style.top = "75%";
+          loading_gif.style.width = "15%";
+          loading_gif.style.height = "15%";
+          loading_gif.style.left = "50%";
+
+          game_logo.style.top = "50%";
+          game_logo.style.left = "50%";
+          game_logo.style.width = "50%"; 
+          game_logo.style.height = "50%";
         }
 
       }
@@ -358,9 +343,9 @@
           companyName: "Tonbingo",
           productName: "FortunaGame",
           productVersion: "0.1",
-	  showBanner: unityShowBanner,
         }, (progress) => {
           loading_bar_fill.style.width = 111.2 * progress + "%";
+          loading_text.innerHTML = Math.round(progress * 100) + '%';
           Update();
         }).then((unityInstance) => {
           myGameInstance = unityInstance;
