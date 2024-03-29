@@ -104,33 +104,33 @@
   <body>
     <canvas id="canvas" class="canvas" tabindex="-1"></canvas>
     <div class="loading_bg">
-      <div class="loading">
-        <div id="flags" style="position: absolute; top: 20%; left: 5%; width: 100%; height: 100%;">
-          <div id="flag1" style="position: absolute; top: 0%; left: 1%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag1.jpg');"></div>
+        <div class="loading">
+            <div id="flags" style="position: absolute; top: 20%; left: 5%; width: 100%; height: 100%;">
+                <div id="flag1" style="position: absolute; top: 0%; left: 1%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag1.jpg');"></div>
 
-          <div id="flag2" style="position: absolute; top: 0%; left: 16%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag2.jpg');"></div>
+                <div id="flag2" style="position: absolute; top: 0%; left: 16%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag2.jpg');"></div>
 
-          <div id="flag3" style="position: absolute; top: 0%; left: 37%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag3.jpg');"></div>
+                <div id="flag3" style="position: absolute; top: 0%; left: 37%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag3.jpg');"></div>
 
-          <div id="flag4" style="position: absolute; top: 0%; left: 53%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag4.jpg');"></div>
+                <div id="flag4" style="position: absolute; top: 0%; left: 53%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag4.jpg');"></div>
 
-          <div id="flag5" style="position: absolute; top: 0%; left: 69%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag5.jpg');"></div>
+                <div id="flag5" style="position: absolute; top: 0%; left: 69%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag5.jpg');"></div>
 
-          <div id="flag6" style="position: absolute; top: 0%; left: 85%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag6.jpg');"></div>
+                <div id="flag6" style="position: absolute; top: 0%; left: 85%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag6.jpg');"></div>
 
-          <div id="flag7" style="position: absolute; top: 0%; left: 85%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag7.jpg');"></div>
+                <div id="flag7" style="position: absolute; top: 0%; left: 85%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag7.jpg');"></div>
 
-          <div id="flag8" style="position: absolute; top: 0%; left: 85%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag8.jpg');"></div>
+                <div id="flag8" style="position: absolute; top: 0%; left: 85%; width: 6%; height: 5%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('flag8.jpg');"></div>
+            </div>
+            <p id="bottom_text" style="position: absolute; top: 82%; left: 10%; bottom: 0; width: 100%; max-width: 80%; text-align: center; color: white; opacity: 70%;">The Bonus Lottery is a reward game provided to active participants. It is developed on the TON blockchain, ensuring fairness through a smart contract.<br><br>Spin the wheel and win from 0.5 to 25 TON.<br><br>Game price: Free<br><br></p>
+            <div id="loading_gif" style="position: absolute; transform: translate(-50%, -50%); top: 45%; width: 20%; height: 20%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('loading.gif');"></div>
+            <p id="loading_text" style="position: absolute; top: 60%; bottom: 0; width: 100%; max-width: 100%; text-align: center; color: white;">0%</p>
+            <div class="loading_logo" id="company_logo"></div>
+            <div class="loading_logo" id="game_logo"></div>
+            <div class="loading_bar">
+                <div class="loading_bar_fill"></div>
+            </div>
         </div>
-        <p id="bottom_text" style="position: absolute; top: 82%; left: 10%; bottom: 0; width: 100%; max-width: 80%; text-align: center; color: white; opacity: 70%;">Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов.<br><br>Все права защищены (c) 2024</p>
-        <div id="loading_gif" style="position: absolute; transform: translate(-50%, -50%); top: 45%; width: 20%; height: 20%; pointer-events: none; background-position: center; background-repeat: no-repeat; background-size: contain; background-attachment: scroll; background-image: url('loading.gif');"></div>
-        <p id="loading_text" style="position: absolute; top: 60%; bottom: 0; width: 100%; max-width: 100%; text-align: center; color: white;">0%</p>
-        <div class="loading_logo" id="company_logo"></div>
-        <div class="loading_logo" id="game_logo"></div>
-        <div class="loading_bar">
-          <div class="loading_bar_fill"></div>
-        </div>
-      </div>
     </div>
     <script>
       var canvas = document.querySelector("#canvas");
